@@ -1,0 +1,98 @@
+﻿@model List<CafeReadModels.ChefTodoList.TodoListGroup>
+
+@{
+    ViewBag.Title = "Chef Todo List";
+}
+
+<link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+
+<style>
+    .mdc-data-table {
+        width: 100%;
+    }
+
+    .mdc-data-table .mdc-data-table__header-row {
+        background-color: #6200ee;
+        color: white;
+    }
+
+    .mdc-data-table .mdc-data-table__header-cell {
+        background-color: #6200ee;
+            color: white;
+            font-weight: bold;
+        }
+
+    .mdc-data-table .mdc-data-table__cell {
+        padding: 16px; 
+    }
+
+    .button-container {
+        text-align: right;
+        padding-top: 1rem;
+    }
+</style>
+
+<h2>Meals To Prepare</h2>
+
+@foreach (var group in Model)
+{
+    var i = 0;
+    using (Html.BeginForm("MarkPrepared", "Chef"))
+    {
+        @Html.Hidden("id", group.Tab)
+        <div class="mdc-data-table">
+            <table class="mdc-data-table__table">
+                <thead>
+                    <tr class="mdc-data-table__header-row">
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Menu #</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Description</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Prepared</th>
+                    </tr>
+                </thead>
+                <tbody class="mdc-data-table__content">
+                    @foreach (var item in group.Items)
+                    {
+                        <tr class="mdc-data-table__row">
+                            <td class="mdc-data-table__cell">@item.MenuNumber</td>
+                            <td class="mdc-data-table__cell">@item.Description</td>
+                            <td class="mdc-data-table__cell">
+                                <div class="mdc-form-field">
+                                    <div class="mdc-checkbox">
+                                        <input type="checkbox"
+                                               id="@($"prepared-{i}-{item.MenuNumber.ToString()}")"
+                                        class="mdc-checkbox__native-control"
+                                               name="@($"prepared_{i}_{item.MenuNumber.ToString()}")" />
+                                        <div class="mdc-checkbox__background">
+                                            <svg class="mdc-checkbox__checkmark"
+                                                 viewBox="0 0 24 24">
+                                                <path class="mdc-checkbox__checkmark-path"
+                                                      fill="none"
+                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                                            </svg>
+                                            <div class="mdc-checkbox__mixedmark"></div>
+                                        </div>
+                                    </div>
+                                    <label for="@($"prepared-{i}-{item.MenuNumber}")"></label>
+                                </div>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="button-container">
+            <button type="submit" class="mdc-button mdc-button--raised">Mark Prepared</button>
+        </div>
+        <hr />
+    }
+}
+
+@section Scripts {
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            mdc.autoInit();
+        });
+    </script>
+}

@@ -1,0 +1,48 @@
+﻿@model WebFrontend.Models.CloseModel
+
+@{
+    ViewBag.Title = "Close";
+}
+
+<h2>Close Tab</h2>
+
+<style>
+    .mdc-text-field {
+        width: 100%;
+    }
+
+    .mdc-button {
+        margin-top: 20px;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    <fieldset>
+        <div class="mdc-text-field mdc-text-field--outlined">
+            <input class="mdc-text-field__input" type="text" id="amountPaid" asp-for="AmountPaid" required>
+            <div class="mdc-notched-outline">
+                <div class="mdc-notched-outline__leading"></div>
+                <div class="mdc-notched-outline__notch">
+                    <label for="amountPaid" class="mdc-floating-label">Amount Paid</label>
+                </div>
+                <div class="mdc-notched-outline__trailing"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="mdc-button mdc-button--raised">
+            <span class="mdc-button__label">Close Tab</span>
+        </button>
+    </fieldset>
+}
+
+@section Scripts {
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            mdc.textField.MDCTextField.attachTo(document.querySelector('.mdc-text-field'));
+            mdc.ripple.MDCRipple.attachTo(document.querySelector('.mdc-button'));
+        });
+    </script>
+}

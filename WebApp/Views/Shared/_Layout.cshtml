@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Elite Restaurant - CQRS at iSX Financial</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --mdc-theme-primary: #6200ee;
+            --mdc-theme-on-primary: #ffffff;
+            --header-height: 64px; /* Adjust this based on your actual header height */
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevents horizontal scroll */
+            background-color: #f5f5f5;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .mdc-top-app-bar {
+            top: 0; /* Ensure the header is right at the top of the page */
+            background-color: var(--mdc-theme-primary);
+            position: fixed; /* Keep fixed at the top */
+            width: 100%;
+            z-index: 4; /* Ensure it's above other content */
+        }
+
+        .mdc-top-app-bar__title {
+            color: var(--mdc-theme-on-primary);
+        }
+
+        .mdc-top-app-bar .mdc-icon-button {
+            color: var(--mdc-theme-on-primary);
+        }
+
+        .content {
+            padding: 20px;
+            padding-top: 80px; /* Increase padding to account for fixed header */
+        }
+
+        .navbar-link {
+            text-decoration: none;
+            color: var(--mdc-theme-on-primary); /* This will set the text color to white or whatever is set for --mdc-theme-on-primary */
+            font-weight: 500;
+            margin-right: 16px;
+            padding: 0 8px; /* Add some padding to make the clickable area larger */
+        }
+
+
+        .sidebar-nav {
+            margin: 16px;
+            padding: 16px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .nav-header {
+            font-weight: 700;
+            padding-bottom: 8px;
+        }
+
+        .nav-item {
+            padding: 8px 0;
+        }
+
+        .footer {
+            padding: 10px 0;
+            background-color: #e8eaf6;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 3; /* Ensure the footer is above other content but below the top bar */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+        <div class="mdc-top-app-bar__row">
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                <span class="mdc-top-app-bar__title">iSX Financial - CQRS Restaurant</span>
+            </section>
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                <a class="navbar-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="navbar-link" asp-area="" asp-controller="Tab" asp-action="Open">Open A Tab (Bill)</a>
+                <a class="navbar-link" asp-area="" asp-controller="Chef" asp-action="Index">Chef Todo List</a>
+                <!-- Include other navigation links if needed -->
+            </section>
+        </div>
+    </header>
+
+    <div class="content">
+        <aside class="sidebar-nav">
+            <div class="nav-header">Servers:</div>
+            <ul class="nav-list">
+                @foreach (var w in ViewData["WaitStaff"] as List<string>)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="WaitStaff" asp-action="Todo" asp-route-id="@w">@w</a>
+                    </li>
+                }
+            </ul>
+        </aside>
+
+        <aside class="sidebar-nav">
+            <div class="nav-header">Open Tabs (Bills):</div>
+            <ul class="nav-list">
+                @foreach (var t in ViewData["ActiveTables"] as List<int>)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Tab" asp-action="Status" asp-route-id="@t.ToString()">@t.ToString()</a>
+                    </li>
+                }
+            </ul>
+        </aside>
+
+        @RenderBody()
+    </div>
+
+    <footer class="footer">
+        &copy; 2023 - iSX CQRS Training Course - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </footer>
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script>
+        mdc.autoInit();
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

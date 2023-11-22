@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+      <ProjectReference Include="..\ISXTraining.CQRS\ISXTraining.CQRS.csproj" />
+      <ProjectReference Include="..\Events\Events.csproj" />
+    </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+</Project>

@@ -1,0 +1,111 @@
+﻿@model Cafe.Tab.OpenTab
+
+@{
+    ViewBag.Title = "Open Tab";
+}
+
+<h2>Open Tab</h2>
+<style>
+    .mdc-select--outlined .mdc-select__anchor{
+    overflow:hidden;
+    }
+    .mdc-select__anchor{
+        width:300px;
+    }
+    .mdc-select__menu {
+        /* This positions the menu above the select anchor */
+        bottom: 100%; /* This assumes your select field height is less than 100% */
+        top: auto !important; /* Override MDC's inline styles if necessary */
+    }
+
+    .mdc-select--with-leading-icon .mdc-select__menu {
+        bottom: calc(100% + 40px);
+    }
+
+    .mdc-select--outlined .mdc-select__anchor {
+        align-items: baseline;
+    }
+
+    .mdc-select__selected-text {
+        white-space: nowrap;
+        text-overflow: clip;
+        width: calc(100% - 50px);
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    <div class="mdc-text-field mdc-text-field--outlined" mdc-auto-init="MDCTextField">
+        <input class="mdc-text-field__input" type="text" id="tableNumber" asp-for="TableNumber" required>
+        <div class="mdc-notched-outline">
+            <div class="mdc-notched-outline__leading"></div>
+            <div class="mdc-notched-outline__notch">
+                <label for="tableNumber" class="mdc-floating-label">Table Number</label>
+            </div>
+            <div class="mdc-notched-outline__trailing"></div>
+        </div>
+    </div>
+
+    <div class="mdc-select mdc-select--outlined">
+        <div class="mdc-select__anchor" role="button" aria-haspopup="listbox" aria-expanded="false">
+            <span class="mdc-select__ripple"></span>
+            <span class="mdc-select__selected-text"></span>
+            <span class="mdc-select__dropdown-icon">
+                <span class="mdc-select__dropdown-icon-inactive">
+                    <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                        <polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+                    </svg>
+                </span>
+                <span class="mdc-select__dropdown-icon-active">
+                    <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                        <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon>
+                    </svg>
+                </span>
+            </span>
+            <span class="mdc-line-ripple"></span>
+        </div>
+
+        <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+            <ul class="mdc-list" role="listbox" aria-label="Waiter/Waitress selection">
+                <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true"></li>
+                @foreach (var waiter in ViewBag.WaitStaff as List<string>)
+                {
+                    <li class="mdc-list-item" role="option" data-value="@waiter">
+                        @waiter
+                    </li>
+                }
+            </ul>
+        </div>
+        <input type="hidden" asp-for="Waiter">
+    </div>
+
+    <button type="submit" class="mdc-button mdc-button--raised">
+        <span class="mdc-button__label">Open Tab</span>
+    </button>
+}
+
+@section Scripts {
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const textField = mdc.textField.MDCTextField.attachTo(document.querySelector('.mdc-text-field'));
+
+            const selectElement = document.querySelector('.mdc-select');
+            const select = new mdc.select.MDCSelect(selectElement);
+            select.listen('MDCSelect:change', () => {
+                // This updates the hidden input with the selected value
+                document.querySelector('input[name="Waiter"]').value = select.value;
+            });
+
+            // This code ensures that the selected item updates visually in the dropdown
+            selectElement.addEventListener('MDCSelect:change', (event) => {
+                selectElement.querySelector('.mdc-select__selected-text').textContent = event.detail.value;
+            });
+
+            // After initialization, adjust the position of the menu
+            const menuElement = selectElement.querySelector('.mdc-select__menu');
+            menuElement.style.bottom = '100%';
+            menuElement.style.top = 'auto';
+        });
+    </script>
+}

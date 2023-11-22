@@ -1,0 +1,71 @@
+﻿@model Dictionary<int, List<CafeReadModels.OpenTabs.TabItem>>
+
+@{
+    ViewBag.Title = "Todo List For " + ViewBag.Waiter;
+}
+
+<!-- Include Material Design CSS -->
+<link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+
+<style>
+    .mdc-data-table {
+        width: 100%;
+    }
+
+    .mdc-data-table .mdc-data-table__header-row {
+        background-color: #6200ee;
+        color: white;
+    }
+
+    .mdc-data-table .mdc-data-table__header-cell {
+        background-color: #6200ee;
+            color: white;
+            font-weight: bold;
+        }
+
+    .mdc-data-table .mdc-data-table__cell {
+        padding: 16px; 
+    }
+
+    .button-container {
+        text-align: right;
+        padding-top: 1rem;
+    }
+</style>
+
+<h2 class="mdc-typography--headline2">Todo List For @ViewBag.Waiter</h2>
+
+@foreach (var table in Model)
+{
+    <h3 class="mdc-typography--headline3">Table @table.Key</h3>
+
+    <!-- Use Material Design data table styles -->
+    <div class="mdc-data-table">
+        <table class="mdc-data-table__table">
+            <thead>
+                <tr class="mdc-data-table__header-row">
+                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Menu #</th>
+                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody class="mdc-data-table__content">
+                @foreach (var item in table.Value)
+                {
+                    <tr class="mdc-data-table__row">
+                        <td class="mdc-data-table__cell">@item.MenuNumber</td>
+                        <td class="mdc-data-table__cell">@item.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Use Material Design button styles -->
+    <a href="@Url.Action("Status", "Tab", new { id = table.Key })" class="mdc-button mdc-button--raised">
+        <span class="mdc-button__label">Go To Tab</span>
+    </a>
+}
+
+<!-- Include Material Design JS -->
+<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+<script>mdc.autoInit();</script>
